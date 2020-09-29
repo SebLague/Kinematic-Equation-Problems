@@ -55,7 +55,7 @@ public class BallLauncher : MonoBehaviour {
 			float simulationTime = i / (float)resolution * launchData.timeToTarget;
 			Vector3 displacement = launchData.initialVelocity * simulationTime + Vector3.up *gravity * simulationTime * simulationTime / 2f;
 			Vector3 drawPoint = ball.position + displacement;
-            if(!isLaunce && i < resolution)drawTrajectory[i-1].transform.position = drawPoint;
+           if (!isLaunce && i < resolution && drawTrajectory.Length > 0) drawTrajectory[i - 1].transform.position = drawPoint;
             Debug.DrawLine (previousDrawPoint, drawPoint, Color.green);
 			previousDrawPoint = drawPoint;
 		}
