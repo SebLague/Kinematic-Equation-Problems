@@ -10,10 +10,13 @@ public class BallLauncher : MonoBehaviour {
 	public float gravity = -18;
 
 	public bool debugPath;
+    [SerializeField] Transform[] drawTrajectory;
 
-	void Start() {
+    bool isLaunce;
+    void Start() {
 		ball.useGravity = false;
-	}
+        Physics.gravity = Vector3.up * gravity;
+    }
 
 	void Update() {
 		if (Input.GetKeyDown (KeyCode.Space)) {
@@ -26,10 +29,12 @@ public class BallLauncher : MonoBehaviour {
 	}
 
 	void Launch() {
-		Physics.gravity = Vector3.up * gravity;
+		
 		ball.useGravity = true;
 		ball.velocity = CalculateLaunchData ().initialVelocity;
-	}
+        isLaunce = true;
+
+    }
 
 	LaunchData CalculateLaunchData() {
 		float displacementY = target.position.y - ball.position.y;
@@ -50,7 +55,8 @@ public class BallLauncher : MonoBehaviour {
 			float simulationTime = i / (float)resolution * launchData.timeToTarget;
 			Vector3 displacement = launchData.initialVelocity * simulationTime + Vector3.up *gravity * simulationTime * simulationTime / 2f;
 			Vector3 drawPoint = ball.position + displacement;
-			Debug.DrawLine (previousDrawPoint, drawPoint, Color.green);
+           if (!isLaunce && i < resolution && drawTrajectory.Length > 0) drawTrajectory[i - 1].transform.position = drawPoint;
+            Debug.DrawLine (previousDrawPoint, drawPoint, Color.green);
 			previousDrawPoint = drawPoint;
 		}
 	}
